@@ -1,9 +1,5 @@
 package demo.controller;
 
-import demo.enumVacancy.VacancyName;
-import demo.exception.NotFoundException;
-import demo.exception.NotFoundExceptionDoubleVacancy;
-import demo.exception.NotFoundExceptionOutVacancy;
 import demo.model.Vacancy;
 import demo.service.VacancyService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +22,11 @@ public class VacansyController {
         return vacancyService.getAll();
     }
 
+    @GetMapping("/{id}")
+    public Vacancy getById(@PathVariable int id) {
+        return vacancyService.getById(id);
+    }
+
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Vacancy create(@RequestBody Vacancy vacancy) {
@@ -38,7 +39,6 @@ public class VacansyController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@PathVariable int id) {
         return vacancyService.deleteById(id);
     }

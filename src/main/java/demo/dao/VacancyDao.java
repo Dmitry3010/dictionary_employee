@@ -1,12 +1,16 @@
 package demo.dao;
 
+import demo.model.Employee;
 import demo.model.Vacancy;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface VacancyDao {
 
     List<Vacancy> findAll();
+
+    Optional<Vacancy> findById (int id);
 
     Vacancy create(Vacancy vacancy);
 

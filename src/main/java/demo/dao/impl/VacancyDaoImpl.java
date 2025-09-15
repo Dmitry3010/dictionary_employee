@@ -27,6 +27,13 @@ public class VacancyDaoImpl implements VacancyDao{
     }
 
     @Override
+    public Optional<Vacancy> findById(int id) {
+        return vacancyList.stream()
+                .filter(vacancy -> vacancy.getId() == id)
+                .findFirst();
+    }
+
+    @Override
     public Vacancy create(Vacancy vacancy) {
         vacancy.setId(idVacancy++);
         vacancy.setName(vacancy.getName());
@@ -39,7 +46,7 @@ public class VacancyDaoImpl implements VacancyDao{
     @Override
     public Vacancy update(Vacancy vacancy) {
         int vacancyId = vacancy.getId();
-        findAll().stream()
+        vacancyList.stream()
                 .filter(vacancyUp -> vacancyUp.getId() == vacancyId)
                 .forEach(vacancyUp -> {
                     vacancyUp.setName(vacancy.getName());

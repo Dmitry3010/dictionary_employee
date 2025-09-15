@@ -1,8 +1,5 @@
 package demo.controller;
 
-import demo.exception.NotFoundException;
-import demo.exception.NotFoundExceptionDoubleEmployee;
-import demo.exception.NotFoundExceptionOutEmployee;
 import demo.model.Employee;
 import demo.service.EmployeeService;
 import org.springframework.http.HttpStatus;
@@ -25,6 +22,11 @@ public class EmployeeController {
         return employeeService.getAll();
     }
 
+    @GetMapping("/{id}")
+    public Employee getById(@PathVariable int id) {
+        return employeeService.getById(id);
+    }
+
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee create(@RequestBody Employee employee) {
@@ -37,7 +39,6 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@PathVariable int id) {
         return employeeService.deleteById(id);
     }

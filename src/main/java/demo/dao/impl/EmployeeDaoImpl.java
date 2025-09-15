@@ -28,6 +28,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
+    public Optional<Employee> findById(int id) {
+        return employeeList.stream()
+                .filter(employee -> employee.getId() == id)
+                .findFirst();
+    }
+
+    @Override
     public Employee create(Employee employee) {
         employee.setId(idEmployee++);
         employee.setDate(LocalDate.now());
@@ -38,7 +45,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Employee update(Employee employee) {
         int employeeId = employee.getId();
-        findAll().stream()
+        employeeList.stream()
                 .filter(employeeUp -> employeeUp.getId() == employeeId)
                 .forEach(employeeUpdate -> {
                     employeeUpdate.setName(employee.getName());
@@ -52,12 +59,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public boolean deleteById(int id) {
-//        for (Employee employee : findAll()){
-//            if (employee.getId() == id){
-//                return findAll().remove(employee);
-//            }
-//        }
-//        return true;
         return findAll().removeIf(employee -> employee.getId() == id);
     }
 }

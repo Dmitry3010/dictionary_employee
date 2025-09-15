@@ -3,13 +3,11 @@ package demo.service.impl;
 import demo.dao.EmployeeDao;
 import demo.exception.NotFoundException;
 import demo.exception.NotFoundExceptionDoubleEmployee;
-import demo.exception.NotFoundExceptionOutEmployee;
 import demo.model.Employee;
 import demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -22,11 +20,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAll() {
-        List<Employee> employeeList = employeeDao.findAll();
-        if (employeeList.isEmpty()){
-            throw new NotFoundException();
-        }
-        return employeeList;
+        return employeeDao.findAll();
+    }
+
+    @Override
+    public Employee getById(int id) {
+        return employeeDao.findById(id)
+                .orElseThrow(()-> new NotFoundException());
     }
 
     @Override
@@ -47,21 +47,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee update(Employee employee) {
         int employeeId = employee.getId();
-        Optional<Employee> employeeUpdate = getAll().stream()
-                .filter(employeeByList -> employeeByList.getId() == employeeId)
-                .findFirst();
-        if (!employeeUpdate.isPresent()){
-            throw new NotFoundExceptionOutEmployee();
-        }
-        return employeeDao.update(employee);
+        Employee employeeUpdate = getById(employeeId);
+        return employeeDao.update(employeeUpdate);
     }
 
     @Override
     public boolean deleteById(int id) {
-        return getAll().stream()
-                .filter(employeeByList -> employeeByList.getId() == id)
-                .findFirst()
-                .map(employee -> employeeDao.deleteById(id))
-                .orElseThrow(() -> new NotFoundExceptionOutEmployee());
+        Employee employeeDelete = getById(id);
+        int employeeDeleteId = employeeDelete.getId();
+        return employeeDao.deleteById(employeeDeleteId);
     }
 }
