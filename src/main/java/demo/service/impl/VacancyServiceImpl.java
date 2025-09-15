@@ -25,7 +25,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public Vacancy getById(int id) {
         return vacancyDao.findById(id)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(() -> new NotFoundException("Вакансии с таким ID не нашлось в списке"));
     }
 
     @Override

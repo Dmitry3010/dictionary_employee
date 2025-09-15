@@ -2,7 +2,6 @@ package demo.service.impl;
 
 import demo.dao.EmployeeDao;
 import demo.exception.NotFoundException;
-import demo.exception.NotFoundExceptionDoubleEmployee;
 import demo.model.Employee;
 import demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee getById(int id) {
         return employeeDao.findById(id)
-                .orElseThrow(()-> new NotFoundException());
+                .orElseThrow(()-> new NotFoundException("Сотрудника таким ID не нашлось в списке"));
     }
 
     @Override
@@ -38,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             if (employeeByList.getSurname().equalsIgnoreCase(surname) &&
                 employeeByList.getName().equalsIgnoreCase(name) &&
                 employeeByList.getPatronymic().equalsIgnoreCase(patronymic)){
-                throw new NotFoundExceptionDoubleEmployee();
+                throw new NotFoundException("Такой сотрудник уже существует в системе");
             }
         }
         return employeeDao.create(employee);
