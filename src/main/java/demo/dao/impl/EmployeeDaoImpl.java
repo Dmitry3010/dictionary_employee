@@ -28,7 +28,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Optional<Employee> findById(int id) {
+    public Optional<Employee> findById(Integer id) {
         return employeeList.stream()
                 .filter(employee -> employee.getId() == id)
                 .findFirst();
@@ -58,7 +58,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(Integer id) {
         return findAll().removeIf(employee -> employee.getId() == id);
     }
 }

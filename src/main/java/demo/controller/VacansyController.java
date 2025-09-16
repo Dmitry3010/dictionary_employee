@@ -23,7 +23,7 @@ public class VacansyController {
     }
 
     @GetMapping("/{id}")
-    public Vacancy getById(@PathVariable int id) {
+    public Vacancy getById(@PathVariable Integer id) {
         return vacancyService.getById(id);
     }
 
@@ -39,7 +39,7 @@ public class VacansyController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean deleteById(@PathVariable int id) {
+    public boolean deleteById(@PathVariable Integer id) {
         return vacancyService.deleteById(id);
     }
 }

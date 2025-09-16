@@ -9,11 +9,11 @@ public interface EmployeeService {
 
     List<Employee> getAll();
 
-    Employee getById (int id);
+    Employee getById (Integer id);
 
     Employee create (Employee employee);
 
     Employee update (Employee employee);
 
-    boolean deleteById (int id);
+    boolean deleteById (Integer id);
 }

@@ -9,11 +9,11 @@ public interface VacancyService {
 
     List<Vacancy> getAll();
 
-    Vacancy getById (int id);
+    Vacancy getById (Integer id);
 
     Vacancy create(Vacancy vacancy);
 
     Vacancy update(Vacancy vacancy);
 
-    boolean deleteById(int id);
+    boolean deleteById(Integer id);
 }

@@ -1,6 +1,7 @@
 package demo.service.impl;
 
 import demo.dao.EmployeeDao;
+import demo.exception.DuplicateException;
 import demo.exception.NotFoundException;
 import demo.model.Employee;
 import demo.service.EmployeeService;
@@ -23,9 +24,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getById(int id) {
+    public Employee getById(Integer id) {
         return employeeDao.findById(id)
-                .orElseThrow(()-> new NotFoundException("Сотрудника таким ID не нашлось в списке"));
+                .orElseThrow(()-> new NotFoundException("Сотрудника таким ID: %s не нашлось в списке", id));
     }
 
     @Override
@@ -37,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             if (employeeByList.getSurname().equalsIgnoreCase(surname) &&
                 employeeByList.getName().equalsIgnoreCase(name) &&
                 employeeByList.getPatronymic().equalsIgnoreCase(patronymic)){
-                throw new NotFoundException("Такой сотрудник уже существует в системе");
+                throw new DuplicateException("Такой сотрудник уже существует в системе ID: &s", employeeByList.getId());
             }
         }
         return employeeDao.create(employee);
@@ -51,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(Integer id) {
         Employee employeeDelete = getById(id);
         int employeeDeleteId = employeeDelete.getId();
         return employeeDao.deleteById(employeeDeleteId);

@@ -9,13 +9,13 @@ public interface EmployeeDao {
 
     List<Employee> findAll();
 
-    Optional<Employee> findById (int id);
+    Optional<Employee> findById (Integer id);
 
     Employee create (Employee employee);
 
     Employee update (Employee employee);
 
-    boolean deleteById (int id);
+    boolean deleteById (Integer id);
 }
 
 //1.  Получить список кандидатов:

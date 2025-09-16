@@ -23,9 +23,9 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public Vacancy getById(int id) {
+    public Vacancy getById(Integer id) {
         return vacancyDao.findById(id)
-                .orElseThrow(() -> new NotFoundException("Вакансии с таким ID не нашлось в списке"));
+                .orElseThrow(() -> new NotFoundException("Вакансии с таким ID: s% не нашлось в списке", id));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(Integer id) {
         Vacancy vacancyDelete = getById(id);
         int vacancyDeleteId = vacancyDelete.getId();
         return vacancyDao.deleteById(vacancyDeleteId);

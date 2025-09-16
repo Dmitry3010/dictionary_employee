@@ -10,13 +10,13 @@ public interface VacancyDao {
 
     List<Vacancy> findAll();
 
-    Optional<Vacancy> findById (int id);
+    Optional<Vacancy> findById (Integer id);
 
     Vacancy create(Vacancy vacancy);
 
     Vacancy update(Vacancy vacancy);
 
-    boolean deleteById(int id);
+    boolean deleteById(Integer id);
 }
 
 //1. Получить список вакансий

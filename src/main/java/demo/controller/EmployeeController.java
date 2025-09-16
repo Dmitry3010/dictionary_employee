@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable int id) {
+    public Employee getById(@PathVariable Integer id) {
         return employeeService.getById(id);
     }
 
@@ -39,7 +39,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean deleteById(@PathVariable int id) {
+    public boolean deleteById(@PathVariable Integer id) {
         return employeeService.deleteById(id);
     }
 }

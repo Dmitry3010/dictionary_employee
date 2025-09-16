@@ -27,7 +27,7 @@ public class VacancyDaoImpl implements VacancyDao{
     }
 
     @Override
-    public Optional<Vacancy> findById(int id) {
+    public Optional<Vacancy> findById(Integer id) {
         return vacancyList.stream()
                 .filter(vacancy -> vacancy.getId() == id)
                 .findFirst();
@@ -59,7 +59,7 @@ public class VacancyDaoImpl implements VacancyDao{
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(Integer id) {
         return findAll().removeIf(vacancy -> vacancy.getId() == id);
     }
 }
