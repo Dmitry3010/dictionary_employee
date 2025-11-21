@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:17.6
+    container_name: my_db
+    environment:
+      POSTGRES_DB: "my_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+
+      #docker run --name my_db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:17.6
+
+      # PostgreSQL 17.6 (Debian 17.6-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+      #(1 row)
+      #
+      #postgres=# create user bd_user with password 'postgres';
+      #CREATE ROLE
+      #postgres=# alter user bd_user with superuser;
+      #ALTER ROLE
+      #postgres=# create database employee_bd;
+      #CREATE DATABASE

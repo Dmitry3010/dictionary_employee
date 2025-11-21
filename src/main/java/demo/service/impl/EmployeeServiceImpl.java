@@ -1,6 +1,8 @@
 package demo.service.impl;
 
 import demo.dao.EmployeeDao;
+import demo.dto.EmployeeCreateResponse;
+import demo.dto.EmployeeItemDto;
 import demo.exception.DuplicateException;
 import demo.exception.NotFoundException;
 import demo.model.Employee;
@@ -19,42 +21,43 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getAll() {
+    public List<EmployeeItemDto> getAll() {
         return employeeDao.findAll();
     }
 
     @Override
-    public Employee getById(Integer id) {
+    public EmployeeItemDto getById(Integer id) {
         return employeeDao.findById(id)
-                .orElseThrow(()-> new NotFoundException("Сотрудника таким ID: %s не нашлось в списке", id));
+                .orElseThrow(()-> new NotFoundException(String.format("Сотрудника таким ID: %s не нашлось в списке", id)));
     }
 
     @Override
-    public Employee create(Employee employee) {
+    public EmployeeCreateResponse create(Employee employee) {
         String surname = employee.getSurname();
         String name = employee.getName();
         String patronymic = employee.getPatronymic();
-        for (Employee employeeByList : getAll()){
+        for (EmployeeItemDto employeeByList : getAll()){
             if (employeeByList.getSurname().equalsIgnoreCase(surname) &&
                 employeeByList.getName().equalsIgnoreCase(name) &&
                 employeeByList.getPatronymic().equalsIgnoreCase(patronymic)){
-                throw new DuplicateException("Такой сотрудник уже существует в системе ID: &s", employeeByList.getId());
+                throw new DuplicateException(String.format("Такой сотрудник уже существует в системе ID: %s", employeeByList.getId()));
             }
         }
-        return employeeDao.create(employee);
+        Employee createdEmployee = employeeDao.create(employee);
+        return EmployeeCreateResponse.of(createdEmployee.getId());
     }
 
     @Override
-    public Employee update(Employee employee) {
-        int employeeId = employee.getId();
-        Employee employeeUpdate = getById(employeeId);
-        return employeeDao.update(employeeUpdate);
+    public void update(Employee employee) {
+        employeeDao.findById(employee.getId())
+                .orElseThrow(() -> new NotFoundException("Сотрудник не найден"));
+        employeeDao.update(employee);
     }
 
     @Override
     public boolean deleteById(Integer id) {
-        Employee employeeDelete = getById(id);
-        int employeeDeleteId = employeeDelete.getId();
-        return employeeDao.deleteById(employeeDeleteId);
+        employeeDao.findById(id)
+                .orElseThrow(() -> new NotFoundException("Сотрудник не найден"));
+        return employeeDao.deleteById(id);
     }
 }

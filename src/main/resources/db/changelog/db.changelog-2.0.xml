@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet author="dkurmanov" id="create-job-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="job" schemaName="job_hunt"/>
+            </not>
+        </preConditions>
+        <sql>
+            <![CDATA[
+            create table if not exists job_hunt.job (
+                id bigserial primary key,
+                employee_id bigint not null,
+                vacancy_id bigint not null,
+
+                 constraint fk_job_employee
+        foreign key (employee_id) references job_hunt.employee(id)
+        on delete restrict,
+
+    constraint fk_job_vacancy
+        foreign key (vacancy_id) references job_hunt.vacancy(id)
+        on delete restrict,
+
+        constraint uq_job_employee_vacancy
+        unique (employee_id, vacancy_id));
+            ]]>
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

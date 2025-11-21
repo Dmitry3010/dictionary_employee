@@ -1,5 +1,7 @@
 package demo.service;
 
+import demo.dto.VacancyCreateResponse;
+import demo.dto.VacancyItemDto;
 import demo.model.Employee;
 import demo.model.Vacancy;
 
@@ -7,13 +9,13 @@ import java.util.List;
 
 public interface VacancyService {
 
-    List<Vacancy> getAll();
+    List<VacancyItemDto> getAll();
 
-    Vacancy getById (Integer id);
+    VacancyItemDto getById (Integer id);
 
-    Vacancy create(Vacancy vacancy);
+    VacancyCreateResponse create(Vacancy vacancy);
 
-    Vacancy update(Vacancy vacancy);
+    void update(Vacancy vacancy);
 
     boolean deleteById(Integer id);
 }

@@ -1,5 +1,6 @@
 package demo.dao;
 
+import demo.dto.EmployeeItemDto;
 import demo.model.Employee;
 
 import java.util.List;
@@ -7,13 +8,13 @@ import java.util.Optional;
 
 public interface EmployeeDao {
 
-    List<Employee> findAll();
+    List<EmployeeItemDto> findAll();
 
-    Optional<Employee> findById (Integer id);
+    Optional<EmployeeItemDto> findById (Integer id);
 
     Employee create (Employee employee);
 
-    Employee update (Employee employee);
+    void update (Employee employee);
 
     boolean deleteById (Integer id);
 }
@@ -31,3 +32,17 @@ public interface EmployeeDao {
 //Имя, фамилия, отчество, город, дата обновления.
 //
 //4. Удалить кандидата.
+
+
+//почитать за ексепшен хендлер, и применить на проекте - позволяет обрабатывать исключения на уровне отдельного контроллера.
+// Для этого достаточно объявить метод в контроллере, в котором будет содержаться вся логика обработки нужного исключения, и пометить его аннотацией.++
+
+//@Primary - по умолчанию выбираем бин+
+//@Qualifier - конкретика, явно указываем ++ это выбрать
+// что лучше использовать то и применить (@Repository в Memory)+
+
+//ликвибейс - система версий для БД можно делать апдейты для бд и откатывать к предыдущему состоянию, есть отдельный файл
+
+//дописать методы +
+
+//проверить методы +

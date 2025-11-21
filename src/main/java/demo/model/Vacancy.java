@@ -1,8 +1,10 @@
 package demo.model;
 
 import demo.enumVacancy.VacancyName;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Vacancy {
@@ -10,17 +12,27 @@ public class Vacancy {
     private int id;
     private String name;
     private String description;
-    private String cityName;
+    private int cityId;
     private boolean accessibility;
     private LocalDate date;
 
-    public Vacancy(int id, String name, String description, String cityName, boolean accessibility, LocalDate date) {
+    public Vacancy(int id, String name, String description, int cityId, boolean accessibility, LocalDate date) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.cityName = cityName;
+        this.cityId = cityId;
         this.accessibility = accessibility;
         this.date = date;
+    }
+
+    public Vacancy(String name, String description, int cityId, boolean accessibility) {
+        this.name = name;
+        this.description = description;
+        this.cityId = cityId;
+        this.accessibility = accessibility;
+    }
+
+    public Vacancy() {
     }
 
     public int getId() {
@@ -47,12 +59,12 @@ public class Vacancy {
         this.description = description;
     }
 
-    public String getCityName() {
-        return cityName;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     public boolean isAccessibility() {
@@ -73,24 +85,23 @@ public class Vacancy {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vacancy vacancy = (Vacancy) o;
-        return id == vacancy.id && accessibility == vacancy.accessibility && name == vacancy.name && Objects.equals(description, vacancy.description) && Objects.equals(cityName, vacancy.cityName) && Objects.equals(date, vacancy.date);
+        return id == vacancy.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, cityName, accessibility, date);
+        return Objects.hashCode(id);
     }
 
     @Override
     public String toString() {
         return "Vacancy{" +
                 "id=" + id +
-                ", name=" + name +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", cityName='" + cityName + '\'' +
+                ", cityId=" + cityId +
                 ", accessibility=" + accessibility +
                 ", date=" + date +
                 '}';

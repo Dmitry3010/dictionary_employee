@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class DuplicateException extends RuntimeException{
 
-    public DuplicateException(String message, int id) {
-        super();
+    public DuplicateException(String message) {
+        super(message);
     }
 }

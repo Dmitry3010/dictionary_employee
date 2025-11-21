@@ -1,5 +1,7 @@
 package demo.controller;
 
+import demo.dto.EmployeeCreateResponse;
+import demo.dto.EmployeeItemDto;
 import demo.model.Employee;
 import demo.service.EmployeeService;
 import org.springframework.http.HttpStatus;
@@ -18,24 +20,25 @@ public class EmployeeController {
     }
 
     @GetMapping("/all")
-    public List<Employee> getAll() {
+    public List<EmployeeItemDto> getAll() {
         return employeeService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable Integer id) {
+    public EmployeeItemDto getById(@PathVariable Integer id) {
         return employeeService.getById(id);
     }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee create(@RequestBody Employee employee) {
+    public EmployeeCreateResponse create(@RequestBody Employee employee) {
         return employeeService.create(employee);
     }
 
     @PutMapping("/update")
-    public Employee update(@RequestBody Employee employee) {
-        return employeeService.update(employee);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody Employee employee) {
+        employeeService.update(employee);
     }
 
     @DeleteMapping("/delete/{id}")

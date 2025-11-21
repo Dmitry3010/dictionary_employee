@@ -1,65 +1,89 @@
 package demo.dao.impl;
 
 import demo.dao.VacancyDao;
-import demo.enumVacancy.VacancyName;
+import demo.dao.mapper.EmployeeMapper;
+import demo.dao.mapper.VacancyMapper;
+import demo.dto.VacancyItemDto;
+import demo.exception.NotFoundException;
+import demo.model.Employee;
 import demo.model.Vacancy;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class VacancyDaoImpl implements VacancyDao{
+public class VacancyDaoImpl implements VacancyDao {
 
-    private List<Vacancy> vacancyList = new ArrayList<>();
-    private int idVacancy = 1;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public VacancyDaoImpl(){
-        create(new Vacancy(0, "Разработчик", "текст", "Москва", true, LocalDate.of(2025,03,21)));
-        create(new Vacancy(0, "Тестировщик", "текст", "Москва", true, LocalDate.of(2025,05,10)));
+    public VacancyDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
-    public List<Vacancy> findAll() {
-        return vacancyList;
+    public List<VacancyItemDto> findAll() {
+        String sql = "select v.id, v.name, v.description, v.accessibility ,c.id as city_id, c.name as city_name, v.start_date \n" +
+                "from job_hunt.vacancy v\n" +
+                "left join job_hunt.city c \n" +
+                "on c.id = v.fk_city\n" +
+                "where v.accessibility = 'true';";
+        return namedParameterJdbcTemplate.query(sql, new VacancyMapper.VacancySimpleMapper());
     }
 
     @Override
-    public Optional<Vacancy> findById(Integer id) {
-        return vacancyList.stream()
-                .filter(vacancy -> vacancy.getId() == id)
-                .findFirst();
+    public Optional<VacancyItemDto> findById(Integer id) {
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("id", id);
+        String sql = "select v.id, v.name, description, v.accessibility, c.id as city_id, c.name as city_name, v.start_date from job_hunt.vacancy v\n" +
+                "left join job_hunt.city c on c.id = v.fk_city where v.id = :id;";
+        return namedParameterJdbcTemplate.query(sql, param,  new VacancyMapper.VacancySimpleMapper())
+                .stream().findFirst();
     }
 
     @Override
     public Vacancy create(Vacancy vacancy) {
-        vacancy.setId(idVacancy++);
-        vacancy.setName(vacancy.getName());
-        vacancy.setAccessibility(true);
-        vacancy.setDate(LocalDate.now());
-        vacancyList.add(vacancy);
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("name", vacancy.getName());
+        param.addValue("description", vacancy.getDescription());
+        param.addValue("start_date", LocalDate.now());
+        param.addValue("fk_city", vacancy.getCityId());
+        param.addValue("accessibility", true);
+
+        String sql = "INSERT INTO job_hunt.vacancy (name, description, accessibility, start_date, fk_city)\n" +
+                "VALUES (:name, :description,:accessibility, :start_date, :fk_city)" +
+                "RETURNING id;\n";
+
+        Integer generatedId = namedParameterJdbcTemplate.queryForObject(sql, param, Integer.class);
+        vacancy.setId(generatedId);
         return vacancy;
     }
 
     @Override
-    public Vacancy update(Vacancy vacancy) {
-        int vacancyId = vacancy.getId();
-        vacancyList.stream()
-                .filter(vacancyUp -> vacancyUp.getId() == vacancyId)
-                .forEach(vacancyUp -> {
-                    vacancyUp.setName(vacancy.getName());
-                    vacancyUp.setDescription(vacancy.getDescription());
-                    vacancyUp.setCityName(vacancy.getCityName());
-                    vacancyUp.setAccessibility(vacancy.isAccessibility());
-                    vacancyUp.setDate(LocalDate.now());
-                });
-        return vacancy;
-    }
+    public void update(Vacancy vacancy) {
+        findById(vacancy.getId())
+                .orElseThrow(() -> new NotFoundException(String.format("Not Found %s", vacancy.getId())));
+
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("id", vacancy.getId());
+        param.addValue("name", vacancy.getName());
+        param.addValue("fkCity", vacancy.getCityId());
+
+        String sql = "update job_hunt.vacancy v set name = :name, fk_city = :fkCity\n" +
+               "where v.id = :id";
+
+        namedParameterJdbcTemplate.update(sql, param);
+        }
 
     @Override
     public boolean deleteById(Integer id) {
-        return findAll().removeIf(vacancy -> vacancy.getId() == id);
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("id", id);
+        String sql = "delete from job_hunt.vacancy v where v.id = :id;";
+        int rows = namedParameterJdbcTemplate.update(sql, param);
+        return rows == 1;
     }
 }

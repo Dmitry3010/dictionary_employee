@@ -1,5 +1,7 @@
 package demo.service;
 
+import demo.dto.EmployeeCreateResponse;
+import demo.dto.EmployeeItemDto;
 import demo.model.Employee;
 
 import java.util.List;
@@ -7,13 +9,13 @@ import java.util.Optional;
 
 public interface EmployeeService {
 
-    List<Employee> getAll();
+    List<EmployeeItemDto> getAll();
 
-    Employee getById (Integer id);
+    EmployeeItemDto getById (Integer id);
 
-    Employee create (Employee employee);
+    EmployeeCreateResponse create (Employee employee);
 
-    Employee update (Employee employee);
+    void update (Employee employee);
 
     boolean deleteById (Integer id);
 }

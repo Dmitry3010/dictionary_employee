@@ -1,7 +1,11 @@
 package demo.service.impl;
 
 import demo.dao.VacancyDao;
+import demo.dto.EmployeeCreateResponse;
+import demo.dto.VacancyCreateResponse;
+import demo.dto.VacancyItemDto;
 import demo.exception.NotFoundException;
+import demo.model.Employee;
 import demo.model.Vacancy;
 import demo.service.VacancyService;
 import org.springframework.stereotype.Service;
@@ -18,31 +22,32 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> getAll() {
+    public List<VacancyItemDto> getAll() {
         return vacancyDao.findAll();
     }
 
     @Override
-    public Vacancy getById(Integer id) {
+    public VacancyItemDto getById(Integer id) {
         return vacancyDao.findById(id)
-                .orElseThrow(() -> new NotFoundException("Вакансии с таким ID: s% не нашлось в списке", id));
+                .orElseThrow(() -> new NotFoundException(String.format("Вакансии с таким ID: %s не нашлось в списке", id)));
     }
 
     @Override
-    public Vacancy create(Vacancy vacancy) {
-        return vacancyDao.create(vacancy);
+    public VacancyCreateResponse create(Vacancy vacancy) {
+        Vacancy createdVacancy = vacancyDao.create(vacancy);
+        return VacancyCreateResponse.of(createdVacancy.getId());
     }
 
     @Override
-    public Vacancy update(Vacancy vacancy) {
-        int vacancyId = vacancy.getId();
-        Vacancy vacancyUpdate = getById(vacancyId);
-        return vacancyDao.update(vacancyUpdate);
+    public void update(Vacancy vacancy) {
+        vacancyDao.findById(vacancy.getId())
+                .orElseThrow(() -> new NotFoundException("Сотрудник не найден"));
+        vacancyDao.update(vacancy);
     }
 
     @Override
     public boolean deleteById(Integer id) {
-        Vacancy vacancyDelete = getById(id);
+        VacancyItemDto vacancyDelete = getById(id);
         int vacancyDeleteId = vacancyDelete.getId();
         return vacancyDao.deleteById(vacancyDeleteId);
     }

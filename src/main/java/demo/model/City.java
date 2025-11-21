@@ -1,6 +1,8 @@
 package demo.model;
 
+import java.util.List;
 import java.util.Objects;
+
 
 public class City {
 
@@ -10,6 +12,9 @@ public class City {
     public City(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public City() {
     }
 
     public int getId() {
@@ -30,15 +35,14 @@ public class City {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         City city = (City) o;
-        return id == city.id && Objects.equals(name, city.name);
+        return id == city.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hashCode(id);
     }
 
     @Override

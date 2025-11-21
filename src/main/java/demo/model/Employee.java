@@ -10,17 +10,28 @@ public class Employee {
     private String name;
     private String patronymic;
     private String description;
-    private String cityName;
+    private int cityId;
     private LocalDate date;
 
-    public Employee(int id, String surname, String name, String patronymic, String description, String cityName, LocalDate date) {
+    public Employee(int id, String surname, String name, String patronymic, String description, int cityId, LocalDate date) {
         this.id = id;
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;
         this.description = description;
-        this.cityName = cityName;
+        this.cityId = cityId;
         this.date = date;
+    }
+
+    public Employee(String surname, String name, String patronymic, String description, int cityId) {
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.description = description;
+        this.cityId = cityId;
+    }
+
+    public Employee() {
     }
 
     public int getId() {
@@ -63,12 +74,12 @@ public class Employee {
         this.description = description;
     }
 
-    public String getCityName() {
-        return cityName;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     public LocalDate getDate() {
@@ -79,17 +90,17 @@ public class Employee {
         this.date = date;
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id && Objects.equals(surname, employee.surname) && Objects.equals(name, employee.name) && Objects.equals(patronymic, employee.patronymic) && Objects.equals(description, employee.description) && Objects.equals(cityName, employee.cityName) && Objects.equals(date, employee.date);
+        return id == employee.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, surname, name, patronymic, description, cityName, date);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -100,7 +111,7 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", description='" + description + '\'' +
-                ", cityName='" + cityName + '\'' +
+                ", cityId=" + cityId +
                 ", date=" + date +
                 '}';
     }
